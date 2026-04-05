@@ -120,57 +120,65 @@ The server will start running on http://localhost:3000.
 
 ---
 
-## Section 6: API Testing Gallery (Postman Proof)
+## Section 6: API Testing Gallery
 
-#### Health & Authentication
-- Health Check: ![01_health_check](screenshots/01_health_check.png)
-- Login: ![02_login](screenshots/02_login.png)
-- Get My Profile: ![03_get_profile](screenshots/03_get_profile.png)
+This section provides visual proof of every major feature, including security enforcement, analytics, and documentation.
 
-#### User Management (Admin Only)
-- List Users: ![04_list_users](screenshots/04_list_users.png)
-- Create User: ![06_create_user](screenshots/06_create_user.png)
-- Update User: ![07_update_user](screenshots/07_update_user.png)
-- Delete User: ![08_delete_user](screenshots/08_delete_user.png)
+### Core Authentication & User Management
+- **Successful Registration:**
+  ![19_register](screenshots/19_register.png)
+- **Successful Login:**
+  ![20_login_success](screenshots/20_login_success.png)
+- **Get My Profile:**
+  ![03_get_profile](screenshots/03_get_profile.png)
+- **Email Conflict (409 Error):**
+  ![22_error_email_conflict](screenshots/22_error_email_conflict.png)
+- **Health Check:**
+  ![01_health_check](screenshots/01_health_check.png)
 
-#### Financial Records
-- List Records: ![09_list_records](screenshots/09_list_records.png)
-- Create Record: ![11_create_record](screenshots/11_create_record.png)
-- Update Record: ![12_update_record](screenshots/12_update_record.png)
-- Delete Record: ![13_delete_record](screenshots/13_delete_record.png)
+### RBAC and Validation Enforcement
+- **Forbidden Action (Viewer cannot create):**
+  ![23_rbac_forbidden_viewer](screenshots/23_rbac_forbidden_viewer.png)
+- **Input Validation Error (Negative Amount):**
+  ![21_validation_negative_amount](screenshots/21_validation_negative_amount.png)
+- **Update User Role:**
+  ![07_update_user](screenshots/07_update_user.png)
+- **Delete User:**
+  ![08_delete_user](screenshots/08_delete_user.png)
 
-#### Dashboard Analytics
-- Summary Totals: ![14_dashboard_summary](screenshots/14_dashboard_summary.png)
-- Recent Activity: ![15_recent_activity](screenshots/15_recent_activity.png)
-- Category Breakdown: ![16_category_breakdown](screenshots/16_category_breakdown.png)
-- Monthly Trends: ![17_monthly_trends](screenshots/17_monthly_trends.png)
-- Weekly Trends: ![18_weekly_trends](screenshots/18_weekly_trends.png)
+### Financial Data & Advanced Filtering
+- **List Records (Default):**
+  ![09_list_records](screenshots/09_list_records.png)
+- **Advanced Filtering & Search:**
+  ![24_list_records_filtered](screenshots/24_list_records_filtered.png)
+- **Create Financial Record:**
+  ![11_create_record](screenshots/11_create_record.png)
+- **Update Financial Record:**
+  ![12_update_record](screenshots/12_update_record.png)
+- **Soft Delete Record:**
+  ![13_delete_record](screenshots/13_delete_record.png)
+
+### Dashboard Analytics & Trends
+- **Total Summary:**
+  ![14_dashboard_summary](screenshots/14_dashboard_summary.png)
+- **Monthly Financial Trends:**
+  ![25_dashboard_trends_monthly](screenshots/25_dashboard_trends_monthly.png)
+- **Recent Activity:**
+  ![15_recent_activity](screenshots/15_recent_activity.png)
+- **Category Breakdown:**
+  ![16_category_breakdown](screenshots/16_category_breakdown.png)
+
+### Swagger UI Interactive Documentation
+- **API Portal Overview:**
+  ![26_swagger_ui_main](screenshots/26_swagger_ui_main.png)
+- **Interactive Endpoint Test (Register):**
+  ![27_swagger_register_test](screenshots/27_swagger_register_test.png)
+- **Live Response Preview:**
+  ![28_swagger_response_preview](screenshots/28_swagger_response_preview.png)
 
 ---
 
-## Section 7: Final Phase Walkthrough (New Screenshots)
-
-Here is a step-by-step guide of the final testing phases we completed.
-
-### Phase 1 & 2: Auth, Registration & Logic
-- Successful Registration: ![19_register](screenshots/19_register.png)
-- Successful Login: ![20_login_success](screenshots/20_login_success.png)
-- Email Conflict (409 Error): ![22_error_email_conflict](screenshots/22_error_email_conflict.png)
-- Invalid Data (422 Error): ![21_validation_negative_amount](screenshots/21_validation_negative_amount.png)
-
-### Phase 3 & 4: Permissions & Data Insights
-- RBAC Enforcement (Viewer Forbidden): ![23_rbac_forbidden_viewer](screenshots/23_rbac_forbidden_viewer.png)
-- Advanced Filtering & Search: ![24_list_records_filtered](screenshots/24_list_records_filtered.png)
-- Monthly Financial Trends: ![25_dashboard_trends_monthly](screenshots/25_dashboard_trends_monthly.png)
-
-### Phase 5: Swagger UI Interaction
-- Interactive API Portal: ![26_swagger_ui_main](screenshots/26_swagger_ui_main.png)
-- Endpoint Execution (Register): ![27_swagger_register_test](screenshots/27_swagger_register_test.png)
-- Live Response Preview: ![28_swagger_response_preview](screenshots/28_swagger_response_preview.png)
-
----
-
-## Section 8: Assumptions and Design Decisions
+## Section 7: Assumptions and Design Decisions
 
 1. Soft Deletes: Financial records are flagged with `deleted_at` instead of being removed, ensuring data integrity for future audits.
 2. Denormalized User Names: When a record is created, the user's name is kept as part of the query results via SQL JOINs, ensuring fast performance.
@@ -180,7 +188,7 @@ Here is a step-by-step guide of the final testing phases we completed.
 
 ---
 
-## Section 9: Deployment Guide
+## Section 8: Deployment Guide
 
 This app is ready to be deployed on platforms like Render or Heroku.
 1. Push your code to GitHub.
@@ -191,7 +199,7 @@ This app is ready to be deployed on platforms like Render or Heroku.
 
 ---
 
-## Section 10: Future Improvements
+## Section 9: Future Improvements
 In the future, I plan to add:
 - A CSV Export feature for financial records.
 - A proper React-based Frontend to visualize the trends and data.
