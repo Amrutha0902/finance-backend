@@ -188,20 +188,13 @@ This section provides visual proof of every major feature, including security en
 
 ---
 
-## Section 8: Deployment Guide
-
-This app is ready to be deployed on platforms like Render or Heroku.
-1. Push your code to GitHub.
-2. Connect your GitHub repo to Render.
-3. Set the Build Command to `npm install`.
-4. Set the Start Command to `npm start`.
-5. Add your .env variables (PORT, JWT_SECRET, etc) in the Render dashboard.
-
----
-
-## Section 9: Future Improvements
+## Section 8: Future Improvements
 In the future, I plan to add:
 - A CSV Export feature for financial records.
 - A proper React-based Frontend to visualize the trends and data.
 - Email notifications for large expense alerts.
 - Multi-currency support.
+
+---
+
+**AUTHOR:** Amrutha Varshini Manam
