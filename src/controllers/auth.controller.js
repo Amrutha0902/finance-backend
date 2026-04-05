@@ -1,6 +1,16 @@
 const authService = require("../services/auth.service");
 const { success } = require("../utils/response");
 
+function register(req, res, next) {
+  try {
+    const { name, email, password } = req.body;
+    const result = authService.register(name, email, password);
+    return success(res, result, "Account created successfully.", 201);
+  } catch (err) {
+    next(err);
+  }
+}
+
 function login(req, res, next) {
   try {
     const { email, password } = req.body;
@@ -20,4 +30,4 @@ function getProfile(req, res, next) {
   }
 }
 
-module.exports = { login, getProfile };
+module.exports = { register, login, getProfile };

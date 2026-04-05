@@ -1,6 +1,36 @@
-const bcrypt    = require("bcryptjs");
-const { getDb } = require("../config/database");
-const { signToken } = require("../utils/jwt");
+const bcrypt         = require("bcryptjs");
+const { v4: uuidv4 } = require("uuid");
+const { getDb }      = require("../config/database");
+const { signToken }  = require("../utils/jwt");
+
+/**
+ * Self-registration — creates a new user with the viewer role.
+ * Returns a signed JWT + safe user profile immediately (no separate login needed).
+ */
+function register(name, email, password) {
+  const db = getDb();
+
+  const existing = db.prepare("SELECT id FROM users WHERE email = ?").get(email);
+  if (existing) {
+    const err = new Error("Email is already registered.");
+    err.statusCode = 409;
+    err.expose = true;
+    throw err;
+  }
+
+  const id     = uuidv4();
+  const hashed = bcrypt.hashSync(password, 10);
+
+  db.prepare(`
+    INSERT INTO users (id, name, email, password, role, status)
+    VALUES (?, ?, ?, ?, 'viewer', 'active')
+  `).run(id, name, email, hashed);
+
+  const user  = db.prepare("SELECT * FROM users WHERE id = ?").get(id);
+  const token = signToken({ id: user.id, role: user.role });
+
+  return { token, user: sanitizeUser(user) };
+}
 
 /**
  * Authenticates a user by email + password.
@@ -34,10 +64,7 @@ function login(email, password) {
 
   const token = signToken({ id: user.id, role: user.role });
 
-  return {
-    token,
-    user: sanitizeUser(user),
-  };
+  return { token, user: sanitizeUser(user) };
 }
 
 /**
@@ -62,4 +89,4 @@ function sanitizeUser(user) {
   return safe;
 }
 
-module.exports = { login, getProfile };
+module.exports = { register, login, getProfile };

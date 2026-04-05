@@ -4,43 +4,162 @@ const controller = require("../controllers/dashboard.controller");
 const { authenticate } = require("../middlewares/auth.middleware");
 const { can }          = require("../middlewares/authorize.middleware");
 
-// All dashboard routes require authentication
+/**
+ * @swagger
+ * tags:
+ *   name: Dashboard
+ *   description: Analytics and summary endpoints for the finance dashboard
+ */
+
 router.use(authenticate);
 
 /**
- * @route   GET /api/dashboard/summary
- * @desc    Total income, expenses, net balance, record count
- * @access  Admin, Analyst, Viewer
+ * @swagger
+ * /api/dashboard/summary:
+ *   get:
+ *     summary: Get financial summary
+ *     description: >
+ *       Returns total income, total expenses, net balance, and total record count
+ *       across all non-deleted records. Available to **all roles**.
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Summary retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       $ref: '#/components/schemas/DashboardSummary'
+ *       401:
+ *         description: Unauthorized
  */
 router.get("/summary", can("VIEW_DASHBOARD"), controller.getSummary);
 
 /**
- * @route   GET /api/dashboard/recent
- * @desc    Most recent N financial records
- * @access  Admin, Analyst, Viewer
- * @query   limit (default: 10, max: 50)
+ * @swagger
+ * /api/dashboard/recent:
+ *   get:
+ *     summary: Get recent activity
+ *     description: Returns the most recently created financial records. Available to **all roles**.
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema: { type: integer, default: 10 }
+ *         description: Number of records to return (max 50)
+ *     responses:
+ *       200:
+ *         description: Recent records retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       401:
+ *         description: Unauthorized
  */
 router.get("/recent", can("VIEW_DASHBOARD"), controller.getRecentActivity);
 
 /**
- * @route   GET /api/dashboard/categories
- * @desc    Income and expense totals grouped by category
- * @access  Admin, Analyst
+ * @swagger
+ * /api/dashboard/categories:
+ *   get:
+ *     summary: Get category breakdown
+ *     description: >
+ *       Returns income and expense totals grouped by category.
+ *       Available to **Admin and Analyst** only.
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Category breakdown retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/CategoryItem'
+ *       403:
+ *         description: Forbidden — Viewer role cannot access insights
  */
 router.get("/categories", can("VIEW_INSIGHTS"), controller.getCategoryBreakdown);
 
 /**
- * @route   GET /api/dashboard/trends/monthly
- * @desc    Monthly income/expense breakdown for a given year
- * @access  Admin, Analyst
- * @query   year (default: current year)
+ * @swagger
+ * /api/dashboard/trends/monthly:
+ *   get:
+ *     summary: Get monthly trends
+ *     description: >
+ *       Returns income and expense totals for all 12 months of a given year.
+ *       Months with no data return zeroes — always returns a complete 12-item array.
+ *       Available to **Admin and Analyst** only.
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: year
+ *         schema: { type: integer, example: 2024 }
+ *         description: Year to analyse (defaults to current year)
+ *     responses:
+ *       200:
+ *         description: Monthly trends retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/MonthlyTrendItem'
+ *       403:
+ *         description: Forbidden — Viewer role cannot access insights
  */
 router.get("/trends/monthly", can("VIEW_INSIGHTS"), controller.getMonthlyTrends);
 
 /**
- * @route   GET /api/dashboard/trends/weekly
- * @desc    Weekly income/expense breakdown for current month
- * @access  Admin, Analyst
+ * @swagger
+ * /api/dashboard/trends/weekly:
+ *   get:
+ *     summary: Get weekly trends
+ *     description: >
+ *       Returns income and expense totals grouped by week for the current month.
+ *       Available to **Admin and Analyst** only.
+ *     tags: [Dashboard]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Weekly trends retrieved
+ *         content:
+ *           application/json:
+ *             schema:
+ *               allOf:
+ *                 - $ref: '#/components/schemas/SuccessResponse'
+ *                 - type: object
+ *                   properties:
+ *                     data:
+ *                       type: array
+ *                       items:
+ *                         $ref: '#/components/schemas/WeeklyTrendItem'
+ *       403:
+ *         description: Forbidden
  */
 router.get("/trends/weekly", can("VIEW_INSIGHTS"), controller.getWeeklyTrends);
 

@@ -1,29 +1,36 @@
 const Database = require("better-sqlite3");
+const path = require("path");
 const bcrypt = require("bcryptjs");
+
+const DB_PATH = process.env.DB_PATH || "./finance.db";
 
 let db;
 
 function getDb() {
   if (!db) {
-    const isTest = process.env.NODE_ENV === "test";
-
-    const DB_PATH = isTest
-      ? "file:testdb?mode=memory&cache=shared"
-      : (process.env.DB_PATH || "./finance.db");
-
-    // console.log("🔥 Using DB:", DB_PATH);
-
-    db = new Database(DB_PATH);
-
-    // ⚠️ Only enable WAL for file-based DB (not memory)
-    if (!isTest) {
+    // Check if we should use memory (for tests) or a real file path
+    const finalPath = DB_PATH === ":memory:" ? ":memory:" : path.resolve(DB_PATH);
+    
+    db = new Database(finalPath);
+    
+    // WAL mode is for persistent files, skipped for :memory:
+    if (DB_PATH !== ":memory:") {
       db.pragma("journal_mode = WAL");
     }
-
     db.pragma("foreign_keys = ON");
   }
-
   return db;
+}
+
+/**
+ * Resets the database connection.
+ * Essential for test isolation in Jest.
+ */
+function resetDb() {
+  if (db) {
+    db.close();
+    db = null;
+  }
 }
 
 function initializeSchema() {
@@ -77,21 +84,8 @@ function seedAdmin() {
       VALUES (?, ?, ?, ?, ?, ?)
     `).run(uuidv4(), "Super Admin", "admin@finance.com", hashed, "admin", "active");
 
-    console.log("✅ Default admin seeded");
+    console.log("✅ Default admin seeded: admin@finance.com / admin123");
   }
 }
 
-// 🔥 OPTIONAL: reset DB between tests (highly recommended)
-function resetDb() {
-  if (db) {
-    db.close();
-    db = null;
-  }
-}
-
-module.exports = {
-  getDb,
-  initializeSchema,
-  seedAdmin,
-  resetDb
-};
+module.exports = { getDb, resetDb, initializeSchema, seedAdmin };
