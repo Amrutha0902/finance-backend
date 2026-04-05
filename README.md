@@ -1,5 +1,16 @@
 # Finance Data Processing and Access Control Backend
 
+---
+
+## 🚀 Live API & Documentation
+The backend is currently **deployed and live on Render**! You can test all features through the interactive portal below:
+
+- **Interactive API Documentation (Swagger):** [https://finance-backend-a5mq.onrender.com/api-docs]
+- **Live Base URL:** `https://finance-backend-a5mq.onrender.com/api`
+- **Health Check:** `https://finance-backend-a5mq.onrender.com/health`
+
+---
+
 ## Section 1: Project Overview
 
 ### What is this project?
@@ -16,7 +27,7 @@ Managing money requires precise math, secure data storage, and strict rules abou
 - Dashboard Analytics – Summary, category breakdown, monthly trends, weekly summary, and recent activity.
 - Input Validation – Strict schema checks (Zod) before data even touches the database.
 - Standardized Error Handling – All API errors follow an identical, predictable JSON format.
-- Swagger API Docs – Visual interface at /api-docs to test endpoints directly.
+- Swagger API Docs – Interactive Visual interface at [/api-docs](https://finance-backend-a5mq.onrender.com/api-docs) to test endpoints directly.
 - Security Headers – Helmet.js protection against common web vulnerabilities.
 - Rate Limiting – Stops bots from brute-forcing login routes or spamming the API.
 
@@ -187,8 +198,25 @@ This section provides visual proof of every major feature, including security en
 5. Wallet Mode (WAL): SQLite is configured in WAL mode to allow concurrent reads and writes, which is critical for dashboard performance.
 
 ---
+## Section 8: Deployment Status & Details
 
-## Section 8: Future Improvements
+The app is deployed on **Render** (Free Tier). Here are the details of the active deployment:
+
+- **Environment:** Node.js (v20+)
+- **Build Command:** `npm install`
+- **Start Command:** `npm run seed && npm start`
+- **Auto-Deployment:** Enabled (updates on every GitHub `main` push)
+
+---
+1. Push your code to GitHub.
+2. Connect your GitHub repo to Render.
+3. Set the Build Command to `npm install`.
+4. Set the Start Command to `npm start`.
+5. Add your .env variables (PORT, JWT_SECRET, etc) in the Render dashboard.
+
+---
+
+## Section 9: Future Improvements
 In the future, I plan to add:
 - A CSV Export feature for financial records.
 - A proper React-based Frontend to visualize the trends and data.
